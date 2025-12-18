@@ -1,0 +1,6 @@
+@EndeksaLite_HostAddress = http://localhost:5141
+
+GET {{EndeksaLite_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
