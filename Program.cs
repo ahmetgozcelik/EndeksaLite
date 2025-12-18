@@ -1,5 +1,6 @@
 using EndeksaLite.Abstractions;
 using EndeksaLite.Providers;
+using EndeksaLite.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IDataProvider, ApiDataProvider>();
+builder.Services.AddScoped<AnalysisService>();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 
