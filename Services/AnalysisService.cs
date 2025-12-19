@@ -15,17 +15,15 @@ public class AnalysisService
         _dataProvider = dataProvider;
     }
 
-    public async Task<List<AnalysisResult>> RunPropertyAnalysisAsync()
+    public List<AnalysisResult> Analyze(IEnumerable<PriceRecord> data)
     {
-        var data = await _dataProvider.FetchDataAsync(); // veri interface üzerinden alındı.
-        if (!data.Any()) return new List<AnalysisResult>(); // Any()->var mı yok mu olayı, bool döner. performanslıdır. sebebi listeyi tarar.
+        if (data == null || !data.Any()) return new List<AnalysisResult>();
 
-        var results = data.GroupBy(x => x.Neighborhood)
-            .Select(group =>
+        return data.GroupBy(x => x.Neighborhood)
+            .Select(group => 
             {
                 var avgPrice = group.Average(x => x.Price);
                 
-                // basit yatırım tavsiyesi mantığı
                 string advice = avgPrice switch
                 {
                     > 10000000 => "Lüks Segment - Beklemede Kal",
@@ -33,16 +31,7 @@ public class AnalysisService
                     _ => "Normal - Piyasa Değerinde"
                 };
 
-                return new AnalysisResult(
-                    group.Key,
-                    avgPrice,
-                    advice,
-                    group.Count()
-                );
+                return new AnalysisResult(group.Key, avgPrice, advice, group.Count());
             }).ToList();
-        
-        OnAnalysisCompleted?.Invoke(this, $"Analiz başarıyla tamamlandı. {results.Count} bölge incelendi.");
-
-        return results;
     }
 }

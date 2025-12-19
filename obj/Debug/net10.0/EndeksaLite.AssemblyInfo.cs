@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EndeksaLite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd258f4cf7f8c7035248f404d0ae84cd5c1dabba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adb9b01da08ea533261719a92481d82ff1ce47e9")]
 [assembly: System.Reflection.AssemblyProductAttribute("EndeksaLite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EndeksaLite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

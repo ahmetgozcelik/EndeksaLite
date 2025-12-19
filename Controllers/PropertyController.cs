@@ -26,14 +26,11 @@ public class PropertyController : ControllerBase
         var provider = sp.GetKeyedService<IDataProvider>(source); // url den gelen local ya da external
 
         if (provider == null) 
-            return BadRequest("Hatalı kaynak! 'local' veya 'external' kullanın.");
+            return BadRequest("Kaynak bulunamadı.");
 
-        // Analiz servisini bu seçilen provider ile çalıştırıyoruz
-        // Not: AnalysisService'i içeride manuel yönetmek yerine constructor'da 
-        // IServiceProvider alıp dinamik çözümlemek daha ileri seviye bir tekniktir.
-        
-        var data = await provider.FetchDataAsync();
-        // (Burada analiz mantığını çalıştırdığını varsayıyoruz...)
-        return Ok(data);
+        var rawData = await provider.FetchDataAsync(); // veri çekme
+        var analysisResult = _analysisService.Analyze(rawData); // veriyi analiz et
+
+        return Ok(analysisResult);
     }
 }
