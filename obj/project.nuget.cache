@@ -1,11 +1,25 @@
 {
   "version": 2,
-  "dgSpecHash": "CiS/K/sm7XQ=",
+  "dgSpecHash": "T3Nw7QH6ntE=",
   "success": true,
   "projectFilePath": "/Users/ahmetgozcelik/Desktop/Projects/EndeksaLite/EndeksaLite.csproj",
   "expectedPackageFiles": [
     "/Users/ahmetgozcelik/.nuget/packages/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
-    "/Users/ahmetgozcelik/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+    "/Users/ahmetgozcelik/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/ahmetgozcelik/.nuget/packages/scalar.aspnetcore/1.2.3/scalar.aspnetcore.1.2.3.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "EndeksaLite depends on Scalar.AspNetCore (>= 1.2.0) but Scalar.AspNetCore 1.2.0 was not found. Scalar.AspNetCore 1.2.3 was resolved instead.",
+      "projectPath": "/Users/ahmetgozcelik/Desktop/Projects/EndeksaLite/EndeksaLite.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/ahmetgozcelik/Desktop/Projects/EndeksaLite/EndeksaLite.csproj",
+      "libraryId": "Scalar.AspNetCore",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

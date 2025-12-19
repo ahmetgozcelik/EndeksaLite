@@ -1,49 +1,55 @@
 using EndeksaLite.Abstractions;
 using EndeksaLite.Providers;
 using EndeksaLite.Services;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// --- 1. Servis Kayıt Bölümü (Dependency Injection) ---
+
+// ÖNEMLİ: Controller yapısını kullanabilmek için bu satır ŞART
+builder.Services.AddControllers(); 
+
 builder.Services.AddOpenApi();
 
+builder.Services.AddHttpClient();
+
+// Proje Servislerin
 builder.Services.AddScoped<IDataProvider, ApiDataProvider>();
 builder.Services.AddScoped<AnalysisService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddKeyedScoped<IDataProvider, ApiDataProvider>("local");
+builder.Services.AddKeyedScoped<IDataProvider, HttpDataProvider>("external");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// --- 2. HTTP Request Pipeline (Middleware) ---
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(); 
 }
 
-app.UseHttpsRedirection();
+// Lokal geliştirmede bazen sorun çıkardığı için şimdilik opsiyonel
+// app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// --- 3. Endpoint ve Controller Tanımlamaları ---
 
+// ÖNEMLİ: Yazdığın PropertyController'ı Scalar/Swagger'a bağlayan sihirli satır:
+app.MapControllers();
+
+// Örnek WeatherForecast (Minimal API olarak kalabilir, zararı yok)
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var summaries = new[] { "Chilly", "Cool", "Mild", "Warm", "Hot" };
+    return Enumerable.Range(1, 5).Select(index =>
+        new {
+            Date = DateTime.Now.AddDays(index),
+            Temp = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        });
 })
 .WithName("GetWeatherForecast");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

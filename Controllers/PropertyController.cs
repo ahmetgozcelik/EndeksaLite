@@ -1,3 +1,4 @@
+using EndeksaLite.Abstractions;
 using EndeksaLite.Models;
 using EndeksaLite.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,20 @@ public class PropertyController : ControllerBase
         _analysisService.OnAnalysisCompleted += _notificationService.HandleAnalysisCompleted;
     }
 
-    [HttpGet("analyze")]
-    public async Task<ActionResult<IEnumerable<AnalysisResult>>> Analyze()
+    [HttpGet("analyze/{source}")]
+    public async Task<ActionResult<IEnumerable<AnalysisResult>>> Analyze(string source, [FromKeyedServices(null)] IServiceProvider sp)
     {
-        var results = await _analysisService.RunPropertyAnalysisAsync();
-        return Ok();
+        var provider = sp.GetKeyedService<IDataProvider>(source); // url den gelen local ya da external
+
+        if (provider == null) 
+            return BadRequest("Hatalı kaynak! 'local' veya 'external' kullanın.");
+
+        // Analiz servisini bu seçilen provider ile çalıştırıyoruz
+        // Not: AnalysisService'i içeride manuel yönetmek yerine constructor'da 
+        // IServiceProvider alıp dinamik çözümlemek daha ileri seviye bir tekniktir.
+        
+        var data = await provider.FetchDataAsync();
+        // (Burada analiz mantığını çalıştırdığını varsayıyoruz...)
+        return Ok(data);
     }
 }
